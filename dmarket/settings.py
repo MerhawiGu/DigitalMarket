@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-TEMPLATE_DEBUG = True
+# TEMPLATE_DEBUG = True
 
 # Application definition
 
