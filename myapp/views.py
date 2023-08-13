@@ -29,7 +29,7 @@ def create_checkout_session(request,id):
             {
                 'price_data':{
                     'currency':'usd',
-                    'prodact_data':{
+                    'product_data':{
                         'name':product.name,
                     },
                     'unit_amount':int(product.price * 100)
@@ -38,9 +38,9 @@ def create_checkout_session(request,id):
             }
         ],
         mode='payment',
-        success_url = request.build_absolute_url(reverse('success')) +
+        success_url = request.build_absolute_uri(reverse('success')) +
         "?session_id={CHECKOUT_SESSION_ID}",
-        cancel_url = request.build_absolute_url(reverse('failed')),
+        cancel_url = request.build_absolute_uri(reverse('failed')),
     )
 
     order = OrderDetail()
@@ -69,9 +69,10 @@ def payment_failed_view(request):
 
 def create_product(request):
     if request.method =='POST':
-        product_form = ProductForm(request.POST)
+        product_form = ProductForm(request.POST,request.FILES)
         if product_form.is_valid():
             new_product = product_form.save()
+            new_product.save()
             return redirect('index')
     product_form = ProductForm()
     return render(request, 'myapp/create_product.html',{'product_form':product_form})
